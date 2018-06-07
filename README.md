@@ -15,7 +15,7 @@ To get started, clone this repository, and [install dependencies](https://facebo
 
 2. Get this project
 
-       git clone https://gitlab.com/safe-retrieve/sky-shepherd-tag-ui
+       git clone https://github.com/collabro2017/geo_tag_ui
        cd sky-shepherd-tag-ui
 
 3. Install project dependencies
