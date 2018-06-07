@@ -1,0 +1,45 @@
+# See https://github.com/react-community/react-native-maps/blob/master/docs/installation.md#installation
+
+platform :ios, "10.0"
+
+target "Tag" do
+  node_modules_path = File.join(File.expand_path(File.dirname(__FILE__)), "../node_modules")
+  react_native_path = File.join(node_modules_path, "react-native")
+  react_native_maps_path = File.join(node_modules_path, "react-native-maps")
+  react_native_vector_icons_path = File.join(node_modules_path, "react-native-vector-icons")
+
+  pod "yoga", path: File.join(react_native_path, "ReactCommon/yoga/yoga.podspec")
+  pod "React", path: react_native_path, subspecs: [
+    "Core",
+    "RCTActionSheet",
+    "RCTAnimation",
+    "RCTGeolocation",
+    "RCTImage",
+    "RCTLinkingIOS",
+    "RCTNetwork",
+    "RCTSettings",
+    "RCTText",
+    "RCTVibration",
+    "RCTWebSocket",
+    "BatchedBridge"
+  ]
+
+  pod "react-native-maps", path: react_native_maps_path
+  pod "GoogleMaps"
+
+  pod 'RNVectorIcons', :path => react_native_vector_icons_path
+
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      if target.name == "react-native-google-maps"
+        target.build_configurations.each do |config|
+          config.build_settings["CLANG_ENABLE_MODULES"] = "No"
+        end
+      end
+
+      if target.name == "React"
+        target.remove_from_project
+      end
+    end
+  end
+end

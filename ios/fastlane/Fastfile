@@ -1,0 +1,41 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+fastlane_version "2.78.0"
+
+before_all do
+  ensure_git_status_clean
+  git_pull
+end
+
+platform :ios do
+  private_lane :build do
+    increment_build_number
+    gym(
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.saferetrieve.tag.a" => "Tag App Store",
+        }
+      },
+      scheme: "Tag",
+    )
+  end
+
+  desc "Ship to TestFlight"
+  lane :beta do
+    # ensure_git_branch(branch: "develop")
+    build
+    pilot
+    commit_version_bump(message: "Bump iOS build number")
+    push_to_git_remote
+  end
+end
